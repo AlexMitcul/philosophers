@@ -6,7 +6,7 @@
 /*   By: amitcul <amitcul@student.42porto.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 17:36:58 by amitcul           #+#    #+#             */
-/*   Updated: 2023/01/28 18:09:20 by amitcul          ###   ########.fr       */
+/*   Updated: 2023/01/29 13:16:30 by amitcul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,29 @@ int	init_argc(t_util *util, int argc, char **argv)
 	return (check_validation(util));
 }
 
+int simulate(t_fork *forks, t_philo *philos, t_util *util)
+{
+	while (1)
+	{
+		util->curr_index = 0;
+		util->eating_times = 1;//!
+		while (util->curr_index < util->philos_count)
+		{
+			if (util->eating_times == -1
+				|| philos[util->curr_index].eating_times < util->eating_times)
+				util->eating_times = 0;
+			if (philo_was_died(&philos[util->curr_index], util))
+			{
+				print(&philos[util->curr_index], DIED);
+				forks_destroy(forks, util->philos_count);
+				pthread_mutex_destroy(&util->stdout_mutex);
+				return (0);
+			}
+		}
+	}
+	return (0);
+}
+
 /**
  * ./philo	number_of_philosophers time_to_die time_to_eat time_to_sleep
  * 			[number_of_times_each_philosopher_must_eat]
@@ -65,15 +88,21 @@ int	init_argc(t_util *util, int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_fork	forks[MAX_PHILOS];
-	// t_phil	philos[MAX_PHILOS];
+	t_fork	*forks;
+	t_philo	*philos;
 	t_util	util;
 
+	forks = malloc(sizeof(t_fork) * MAX_PHILOS);
+	if (!forks)
+		return (1);
+	philos = malloc(sizeof(t_philo) * MAX_PHILOS);
+	if (!philos)
+		return (1);
 	if (init_argc(&util, argc, argv))
 		return (1);
-	// if (init_forks())
-	// 	return (1);
-	// if (init_philos())
-	// 	return (1);
-	// return (simulate());
+	if (init_forks(forks, util.philos_count))
+		return (1);
+	if (init_philos(philos, forks, &util))
+		return (1);
+	return (simulate(forks, philos, &util));
 }
