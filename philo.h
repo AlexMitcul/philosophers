@@ -6,7 +6,7 @@
 /*   By: amitcul <amitcul@student.42porto.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 17:37:19 by amitcul           #+#    #+#             */
-/*   Updated: 2023/01/29 13:26:00 by amitcul          ###   ########.fr       */
+/*   Updated: 2023/02/06 14:30:31 by amitcul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,3 +83,20 @@ int		init_forks(t_fork *forks, int forks_count);
 int		init_philos(t_philo *philos, t_fork *forks, t_util *util);
 
 #endif
+
+// 3 -> 4 -> null;
+
+
+// while (curr->next->next != NULL)
+
+// t_item {
+// 	int val;
+// 	t_item *next;
+// 	t_item *prev;
+// }
+
+// struct stack {
+// 	int size;
+// 	t_item *head; -> inicio da lista
+// 	t_item *tail; -> fim da lista
+// }
