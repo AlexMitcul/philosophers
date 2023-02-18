@@ -3,7 +3,9 @@
 </p>
 
 # Welcome to Philosophers
- Eat, Sleep, Spaghetti, repeat. This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger.
+Eat, Sleep, Spaghetti, repeat.
+ 
+This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger.
 
 ## Status
 Finished: 12/02/2023<br>
@@ -86,7 +88,7 @@ Now let's say that philosopher 1 decides to pick up the fork to their left, phil
 
 At this point, all five philosophers have one fork and are waiting for their neighbor to release the other fork they need to eat. However, since each philosopher is holding onto a fork that their neighbor needs, none of the philosophers can proceed with eating.
 
-![Deadlock 1](https://github.com/AlexMitcul/philosophers/blob/main/img/1.jpeg)
+<img src="https://github.com/AlexMitcul/philosophers/blob/main/img/1.jpeg" width="600">
 
 ### Dijkstra's solution
 
@@ -102,7 +104,7 @@ The algorithm works as follows:
 - After waiting, the philosopher tries again to pick up the fork with the lower number.
 - If the philosopher successfully picks up the lower-numbered fork, they try to pick up the higher-numbered fork.
 
-![Solution 1](https://github.com/AlexMitcul/philosophers/blob/main/img/2.jpeg)
+<img src="https://github.com/AlexMitcul/philosophers/blob/main/img/2.jpeg" width="600">
 
 By enforcing this ordering of resource acquisition, Dijkstra's solution ensures that no two philosophers will be able to pick up both forks at the same time, thus preventing deadlocks. However, the solution may still result in starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the forks.
 
@@ -110,10 +112,14 @@ By enforcing this ordering of resource acquisition, Dijkstra's solution ensures 
 
 To prevent the starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the forks.
 
-Let's make it a condition that each philosopher with an odd number comes to the table a little late. This will help to distribute the forks evenly to all the seated philosophers and prevent sub-optimal behavior.
+Let's make it a condition that each philosopher with an odd id comes to the table a little late. This will help to distribute the forks evenly to all the seated philosophers and prevent suboptimal behavior.
 
-![Solution 1](https://github.com/AlexMitcul/philosophers/blob/main/img/4.jpeg)
-![Solution 1](https://github.com/AlexMitcul/philosophers/blob/main/img/3.jpeg)
+### Step 1
+<img src="https://github.com/AlexMitcul/philosophers/blob/main/img/4.jpeg" width="600">
+
+### Step 2
+
+<img src="https://github.com/AlexMitcul/philosophers/blob/main/img/3.jpeg" width="600">
 
 ## What need to know to realize that
 
