@@ -279,5 +279,8 @@ int main() {
 }
 ```
 
+<img src="https://github.com/AlexMitcul/philosophers/blob/main/img/scheme1.jpeg" width="800">
+<img src="https://github.com/AlexMitcul/philosophers/blob/main/img/scheme2.jpeg" width="800">
+
 -----
 | amitcul@student.42porto.com | ![LinkedIn](https://www.linkedin.com/in/alex-mitcul/) | ![Telegram](t.me/MitculAlex) |
