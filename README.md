@@ -2,15 +2,12 @@
   <img src="https://github.com/mcombeau/mcombeau/blob/main/42_badges/philosopherse.png" />
 </p>
 
-## Welcome to Philosophers
- Eat, Sleep, Spaghetti, repeat. This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger. 
+# Welcome to Philosophers
+ Eat, Sleep, Spaghetti, repeat. This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger.
 
 ## Status
 Finished: 12/02/2023<br>
 Grade: 100/100%
-
-
-# Project Title
 
 ## Project introduction
 
@@ -22,44 +19,44 @@ The Dining Philosophers Problem is a classic computer science problem that illus
 
 Each philosopher alternates between two activities: eating and thinking. To eat, a philosopher must pick up both forks adjacent to them. Once they are finished eating, they must put down the forks so that they can be used by their neighbors.
 
-The challenge is to design a solution that prevents deadlocks and starvation. 
+The challenge is to design a solution that prevents deadlocks and starvation.
 
 ### Deadlock? What is it?
 
 In computer science, a deadlock is a situation where two or more processes are blocked and waiting for each other to release a resource that they need to proceed, resulting in a standstill where none of the processes can make progress.
 
-Let's imagine a scenario where there are five philosophers seated at a circular table, each with one chopstick to their left and one chopstick to their right. In the beginning, all philosophers are thinking and have not picked up any chopsticks.
+Let's imagine a scenario where there are five philosophers seated at a circular table, each with one fork to their left and one fork to their right. In the beginning, all philosophers are thinking and have not picked up any forks.
 
-Now let's say that philosopher 1 decides to pick up the chopstick to their left, philosopher 2 decides to pick up the chopstick to their right, philosopher 3 picks up the chopstick to their left, philosopher 4 picks up the chopstick to their right, and philosopher 5 picks up the chopstick to their left.
+Now let's say that philosopher 1 decides to pick up the fork to their left, philosopher 2 decides to pick up the fork to their right, philosopher 3 picks up the fork to their left, philosopher 4 picks up the fork to their right, and philosopher 5 picks up the fork to their left.
 
-At this point, all five philosophers have one chopstick and are waiting for their neighbor to release the other chopstick they need to eat. However, since each philosopher is holding onto a chopstick that their neighbor needs, none of the philosophers can proceed with eating.
+At this point, all five philosophers have one fork and are waiting for their neighbor to release the other fork they need to eat. However, since each philosopher is holding onto a fork that their neighbor needs, none of the philosophers can proceed with eating.
 
 ### Dijkstra's solution
 
 Dijkstra's solution to the dining philosophers problem is one of the classic algorithms for preventing deadlocks in a concurrent system where multiple processes compete for a limited set of resources. The algorithm is named after Dutch computer scientist Edsger W. Dijkstra, who first proposed it in 1965.
 
-Dijkstra's solution is based on the idea of introducing a strict ordering of the resources, such that each philosopher can only pick up the chopstick of lower priority before picking up the chopstick of higher priority. In other words, a philosopher can only pick up the chopstick to their left if the chopstick to their right is not currently in use by a higher-priority philosopher.
+Dijkstra's solution is based on the idea of introducing a strict ordering of the resources, such that each philosopher can only pick up the fork of lower priority before picking up the fork of higher priority. In other words, a philosopher can only pick up the fork to their left if the fork to their right is not currently in use by a higher-priority philosopher.
 
 The algorithm works as follows:
 
 - Each philosopher is assigned a number, from 1 to N, where N is the number of philosophers.
-- Each philosopher first tries to pick up the chopstick with the lower number.
-- If the philosopher cannot pick up the lower-numbered chopstick because it is currently in use by another philosopher, they put down the chopstick they are holding and wait for a short time.
-- After waiting, the philosopher tries again to pick up the chopstick with the lower number.
-- If the philosopher successfully picks up the lower-numbered chopstick, they try to pick up the higher-numbered chopstick.
-- If the philosopher cannot pick up the higher-numbered chopstick because it is currently in use by another philosopher, they put down both chopsticks and start again from step 2.
+- Each philosopher first tries to pick up the fork with the lower number.
+- If the philosopher cannot pick up the lower-numbered fork because it is currently in use by another philosopher, they put down the fork they are holding and wait for a short time.
+- After waiting, the philosopher tries again to pick up the fork with the lower number.
+- If the philosopher successfully picks up the lower-numbered fork, they try to pick up the higher-numbered fork.
+- If the philosopher cannot pick up the higher-numbered fork because it is currently in use by another philosopher, they put down both forks and start again from step 2.
 
-By enforcing this ordering of resource acquisition, Dijkstra's solution ensures that no two philosophers will be able to pick up both chopsticks at the same time, thus preventing deadlocks. However, the solution may still result in starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the chopsticks.
+By enforcing this ordering of resource acquisition, Dijkstra's solution ensures that no two philosophers will be able to pick up both forks at the same time, thus preventing deadlocks. However, the solution may still result in starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the forks.
 
 ### Optimization the Dijkstra's solution
 
-To prevent the starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the chopsticks.
+To prevent the starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the forks.
 
 Let's make it a condition that each philosopher with an odd number comes to the table a little late. This will help to distribute the forks evenly to all the seated philosophers and prevent sub-optimal behavior.
 
 ## What need to know to realize that
 
-### UNIX Threads
+## UNIX Threads
 
 Unix threads are a type of lightweight process that allows for concurrent execution of multiple tasks within a single process. Threads are often used to implement parallelism in programs that can benefit from simultaneous execution of multiple tasks, such as web servers, database servers, and multimedia applications.
 
@@ -100,45 +97,22 @@ pthread_join is a function used to wait for a thread to terminate and to obtain 
 
 - Any resources that were associated with the thread are released and made available for reuse by the system.
 
-To more information use https://man7.org/linux/man-pages/man7/pthreads.7.html
+To more information use [man page](https://man7.org/linux/man-pages/man7/pthreads.7.html)
 
-```cpp
-#include <pthread.h>
+### Which of them I need to use?
 
-pthread_mutex_t mutex;
+The main difference between pthread_join and pthread_detach is that pthread_join is used to wait for a thread to terminate and obtain its exit status, while pthread_detach is used to detach a thread from the process so that it can continue executing independently.
 
-void *thread_function(void *arg) {
-    // Acquire the mutex lock
-    pthread_mutex_lock(&mutex);
-    // Critical section
-    pthread_mutex_unlock(&mutex);
-    return NULL;
-}
+Here are some more details on the differences between the two functions:
 
-int main() {
-    // Initialize the mutex object
-    pthread_mutex_init(&mutex, NULL);
-    
-    // Create a new thread
-    pthread_t thread;
-    pthread_create(&thread, NULL, thread_function, NULL);
-    
-    // Acquire the mutex lock
-    pthread_mutex_lock(&mutex);
-    // Critical section
-    pthread_mutex_unlock(&mutex);
-    
-    // Wait for the thread to finish
-    pthread_join(thread, NULL);
-    
-    // Destroy the mutex object when you are done using it
-    pthread_mutex_destroy(&mutex);
-    
-    return 0;
-}
-```
+- pthread_join: When a thread is created with pthread_create, it is said to be "joinable" by default, which means that another thread can wait for it to terminate using pthread_join. When a thread is joined with pthread_join, the calling thread blocks until the specified thread has terminated. The exit status of the specified thread is then obtained and stored in a variable passed as a parameter. Once the specified thread has been joined, its resources are automatically released. If the specified thread has already terminated, pthread_join returns immediately.
 
-### Mutex
+- pthread_detach: When a thread is detached with pthread_detach, it is removed from the process's thread list and is no longer joinable. Once a thread is detached, it can continue executing independently of the process, and its resources are automatically released when it terminates. If a thread is detached and later attempts to be joined using pthread_join, the result is undefined and may cause a segmentation fault or other error.
+
+In summary, if you need to obtain the exit status of a thread or ensure that it has terminated before proceeding, you should use pthread_join. If you want to detach a thread so that it can continue executing independently, you should use pthread_detach.
+
+
+## Mutex
 
 A mutex, short for "mutual exclusion", is a synchronization primitive used to ensure that only one thread at a time can access a shared resource, such as a variable or a data structure, in a multithreaded program. A mutex is essentially a lock that a thread can acquire before accessing a shared resource, and release after it has finished accessing the resource.
 
@@ -200,19 +174,43 @@ pthread_mutex_destroy is a function used to destroy a mutex object that was prev
 
 - After the mutex object is destroyed, it can no longer be used, and any attempt to use it will result in undefined behavior.
 
-To more information use https://linux.die.net/man/3/pthread_mutex_init
+To more information use [man page](https://linux.die.net/man/3/pthread_mutex_init)
 
-### Which of them I need to use?
+```cpp
+#include <pthread.h>
 
-The main difference between pthread_join and pthread_detach is that pthread_join is used to wait for a thread to terminate and obtain its exit status, while pthread_detach is used to detach a thread from the process so that it can continue executing independently.
+pthread_mutex_t mutex;
 
-Here are some more details on the differences between the two functions:
+void *thread_function(void *arg) {
+    // Acquire the mutex lock
+    pthread_mutex_lock(&mutex);
+    // Critical section
+    pthread_mutex_unlock(&mutex);
+    return NULL;
+}
 
-- pthread_join: When a thread is created with pthread_create, it is said to be "joinable" by default, which means that another thread can wait for it to terminate using pthread_join. When a thread is joined with pthread_join, the calling thread blocks until the specified thread has terminated. The exit status of the specified thread is then obtained and stored in a variable passed as a parameter. Once the specified thread has been joined, its resources are automatically released. If the specified thread has already terminated, pthread_join returns immediately.
+int main() {
+    // Initialize the mutex object
+    pthread_mutex_init(&mutex, NULL);
 
-- pthread_detach: When a thread is detached with pthread_detach, it is removed from the process's thread list and is no longer joinable. Once a thread is detached, it can continue executing independently of the process, and its resources are automatically released when it terminates. If a thread is detached and later attempts to be joined using pthread_join, the result is undefined and may cause a segmentation fault or other error.
+    // Create a new thread
+    pthread_t thread;
+    pthread_create(&thread, NULL, thread_function, NULL);
 
-In summary, if you need to obtain the exit status of a thread or ensure that it has terminated before proceeding, you should use pthread_join. If you want to detach a thread so that it can continue executing independently, you should use pthread_detach.
+    // Acquire the mutex lock
+    pthread_mutex_lock(&mutex);
+    // Critical section
+    pthread_mutex_unlock(&mutex);
+
+    // Wait for the thread to finish
+    pthread_join(thread, NULL);
+
+    // Destroy the mutex object when you are done using it
+    pthread_mutex_destroy(&mutex);
+
+    return 0;
+}
+```
 
 -----
 | amitcul@student.42porto.com | ![LinkedIn](https://www.linkedin.com/in/alex-mitcul/) | ![Telegram](t.me/MitculAlex) |
