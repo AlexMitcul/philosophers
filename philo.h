@@ -5,98 +5,77 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amitcul <amitcul@student.42porto.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/28 17:37:19 by amitcul           #+#    #+#             */
-/*   Updated: 2023/02/06 14:30:31 by amitcul          ###   ########.fr       */
+/*   Created: 2023/02/07 21:17:43 by amitcul           #+#    #+#             */
+/*   Updated: 2023/02/12 13:47:49 by amitcul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
-# include <pthread.h>
 
-# define MAX_PHILOS 300
+# include <limits.h>
 
 # define FORK "has taken a fork"
+
 # define EAT "is eating"
+
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
 # define DIED "died"
 
-typedef pthread_mutex_t t_mutex;
-typedef struct timeval t_timeval;
+# define ERROR 1
+# define OK 0
+
+typedef pthread_mutex_t	t_mutex;
+typedef struct timeval	t_time;
 
 typedef struct s_fork
 {
-	int		fork;
-	int		is_busy;
+	int		id;
 	t_mutex	mutex;
 }	t_fork;
 
-typedef struct s_util
+typedef struct s_philo
 {
-	int			curr_index;
+	int				id;
+	t_fork			*left;
+	t_fork			*right;
+	t_mutex			condition_update;
+	int				dinners_count;
+	long long		last_meal_time;
+	pthread_t		thread_id;
+	struct s_data	*data;
+}	t_philo;
+
+typedef struct s_data
+{
 	int			philos_count;
 	int			time_to_die;
 	int			time_to_eat;
 	int			time_to_sleep;
-	int			eating_times;
-	t_timeval	start_time;
-	t_mutex		stdout_mutex;
-}	t_util;
+	int			dinners_count;
+	int			was_death;
+	int			everyone_eaten;
+	long long	start_time;
+	t_mutex		stdout;
+	t_mutex		death_check;
+	t_fork		*forks;
+	t_philo		*philos;
+}	t_data;
 
-typedef struct s_philo
-{
-	int			philo;
-	t_fork		*left;
-	t_fork		*right;
-	t_mutex		*stdout_mutex;
-	t_mutex		*condition_mutex;
-	int			eating_times;
-	t_timeval	last_time_eat;
-	long int	time_to_eat;
-	long int	time_to_sleep;
-	t_timeval	program_start_time;
-}	t_philo;
-
-/** utils **/
-int		ft_atoi(char *str);
-void	print(t_philo *philo, char *message);
-void	update_last_eating_time(t_timeval *last_time_eat, t_philo *philo,
-			int was_sleeping);
-
-/** philo **/
-void	*philo_func(void *data);
-int		philo_was_died(t_philo *philo, t_util *util);
-
-/** forks **/
-void	forks_destroy(t_fork *forks, int count);
-void	fork_lock(t_fork *fork);
-void	fork_unlock(t_fork *fork);
-
-/** init **/
-int		init_forks(t_fork *forks, int forks_count);
-int		init_philos(t_philo *philos, t_fork *forks, t_util *util);
+int			ft_atoi(const char *str);
+long long	get_time(void);
+void		print(t_philo *philo, char *message);
+int			lock_fork(t_philo *philo, t_fork *fork);
+int			init(t_data *data, int argc, char **argv);
+void		*simulate(void *data);
+void		death_cycle(t_data *data);
+void		sl(long long time);
 
 #endif
-
-// 3 -> 4 -> null;
-
-
-// while (curr->next->next != NULL)
-
-// t_item {
-// 	int val;
-// 	t_item *next;
-// 	t_item *prev;
-// }
-
-// struct stack {
-// 	int size;
-// 	t_item *head; -> inicio da lista
-// 	t_item *tail; -> fim da lista
-// }

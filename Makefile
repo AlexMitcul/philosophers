@@ -6,23 +6,23 @@
 #    By: amitcul <amitcul@student.42porto.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/18 14:55:51 by amitcul           #+#    #+#              #
-#    Updated: 2023/01/29 13:37:00 by amitcul          ###   ########.fr        #
+#    Updated: 2023/02/12 13:09:09 by amitcul          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-#  = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 INC = philo.h
-SRC = main.c philo.c utils.c init.c forks.c
+SRC = main.c init.c utils.c handler.c
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
+# -fsanitize=thread
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -lpthread -o $(NAME)
 

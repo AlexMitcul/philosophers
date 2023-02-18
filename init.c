@@ -5,52 +5,86 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amitcul <amitcul@student.42porto.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 12:50:24 by amitcul           #+#    #+#             */
-/*   Updated: 2023/01/29 13:26:00 by amitcul          ###   ########.fr       */
+/*   Created: 2023/02/08 14:18:28 by amitcul           #+#    #+#             */
+/*   Updated: 2023/02/11 21:53:47 by amitcul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_philos(t_philo *philos, t_fork *forks, t_util *util)
-{
-	int			i;
-	pthread_t	ptid;
-
-	i = 0;
-	while (i < util->philos_count)
-	{
-		philos[i].philo = i + 1;
-		philos[i].left = forks + i;
-		philos[i].right = forks + ((i + 1) % util->philos_count);
-		philos[i].stdout_mutex = &(util->stdout_mutex);
-		if (pthread_mutex_init(philos[i].condition_mutex, 0))
-			return (1);
-		philos[i].eating_times = 0;
-		philos[i].time_to_eat = util->time_to_eat;
-		philos[i].time_to_sleep = util->time_to_sleep;
-		philos[i].program_start_time = util->start_time;
-		gettimeofday(&philos[i].last_time_eat, 0);
-		if (pthread_create(&ptid, 0, philo_func, &(philos[i])))
-			return (1);
-		pthread_detach(ptid);
-		i++;
-	}
-	return (0);
-}
-
-int	init_forks(t_fork *forks, int forks_count)
+int	init_philos(t_data *data)
 {
 	int	i;
 
+	data->philos = malloc(sizeof(t_philo) * data->philos_count);
+	if (!data->philos)
+		return (ERROR);
 	i = 0;
-	while (i < forks_count)
+	while (i < data->philos_count)
 	{
-		forks[i].fork = i + 1;
-		forks[i].is_busy = 0;
-		if (pthread_mutex_init(&forks[i].mutex, 0))
-			return (1);
+		data->philos[i].id = i + 1;
+		data->philos[i].dinners_count = 0;
+		data->philos[i].data = data;
+		data->philos[i].left = &data->forks[i];
+		data->philos[i].right = &data->forks[(i + 1) % data->philos_count];
+		if (data->philos[i].left->id > data->philos[i].right->id)
+		{
+			data->philos[i].left = &data->forks[(i + 1) % data->philos_count];
+			data->philos[i].right = &data->forks[i];
+		}
+		pthread_mutex_init(&data->philos[i].condition_update, NULL);
 		i++;
+	}
+	return (OK);
+}
+
+int	init_forks(t_data *data)
+{
+	int	i;
+
+	data->forks = malloc(sizeof(t_fork) * data->philos_count);
+	if (!data->forks)
+		return (ERROR);
+	i = 0;
+	while (i < data->philos_count)
+	{
+		data->forks[i].id = i + 1;
+		pthread_mutex_init(&data->forks[i].mutex, NULL);
+		i++;
+	}
+	return (OK);
+}
+
+int	validation(t_data *data)
+{
+	if (data->philos_count <= 0
+		|| data->dinners_count <= 0
+		|| data->time_to_die <= 0
+		|| data->time_to_eat <= 0
+		|| data->time_to_sleep <= 0)
+		return (1);
+	return (0);
+}
+
+int	init(t_data *data, int argc, char **argv)
+{
+	if (!data || (argc != 5 && argc != 6))
+		return (1);
+	data->philos_count = ft_atoi(argv[1]);
+	data->time_to_die = ft_atoi(argv[2]);
+	data->time_to_eat = ft_atoi(argv[3]);
+	data->time_to_sleep = ft_atoi(argv[4]);
+	data->dinners_count = INT_MAX;
+	data->was_death = 0;
+	data->everyone_eaten = 0;
+	pthread_mutex_init(&data->stdout, NULL);
+	pthread_mutex_init(&data->death_check, NULL);
+	if (argc == 6)
+		data->dinners_count = ft_atoi(argv[5]);
+	if (validation(data) || init_forks(data) || init_philos(data))
+	{
+		free(data);
+		return (1);
 	}
 	return (0);
 }

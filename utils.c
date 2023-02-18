@@ -5,14 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amitcul <amitcul@student.42porto.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/28 18:01:07 by amitcul           #+#    #+#             */
-/*   Updated: 2023/01/29 13:24:19 by amitcul          ###   ########.fr       */
+/*   Created: 2023/02/08 14:22:23 by amitcul           #+#    #+#             */
+/*   Updated: 2023/02/12 13:47:36 by amitcul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_atoi(char *str)
+long long	get_time(void)
+{
+	t_time	time;
+
+	gettimeofday(&time, NULL);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+int	ft_atoi(const char *str)
 {
 	int	res;
 	int	i;
@@ -31,19 +39,39 @@ int	ft_atoi(char *str)
 
 void	print(t_philo *philo, char *message)
 {
-	t_timeval	tv;
-	int			time;
+	long long	time;
+	long long	gap;
 
-	gettimeofday(&tv, 0);
-	time = (tv.tv_sec - philo->program_start_time.tv_sec) * 1000
-			+ (tv.tv_usec - philo->program_start_time.tv_usec) / 1000;
-	printf("%d %d %s\n", time, philo->philo, message);
+	time = get_time();
+	gap = time - philo->data->start_time;
+	pthread_mutex_lock(&philo->data->stdout);
+	printf("%lld %d %s\n", gap, philo->id, message);
+	pthread_mutex_unlock(&philo->data->stdout);
 }
 
-void	update_last_eating_time(t_timeval *last_time_eat, t_philo *philo,
-								int was_sleeping)
+void	sl(long long time)
 {
-	(void)last_time_eat;
-	(void)philo;
-	(void)was_sleeping;
+	long long	start_time;
+	long long	curr_time;
+
+	curr_time = get_time();
+	start_time = get_time();
+	while (curr_time - start_time < time)
+	{
+		usleep(10);
+		curr_time = get_time();
+	}
+}
+
+int	lock_fork(t_philo *philo, t_fork *fork)
+{
+	pthread_mutex_lock(&philo->data->death_check);
+	if (philo->data->was_death || philo->data->everyone_eaten)
+	{
+		pthread_mutex_unlock(&philo->data->death_check);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->death_check);
+	pthread_mutex_lock(&fork->mutex);
+	return (0);
 }
