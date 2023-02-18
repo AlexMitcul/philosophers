@@ -21,6 +21,10 @@ Each philosopher alternates between two activities: eating and thinking. To eat,
 
 The challenge is to design a solution that prevents deadlocks and starvation.
 
+### 42 Philosophers problem modification
+
+In school project we have some modification in behaviour of philosophers. Each philosopher after eating be sure to go to bed and sleep time_to_sleep milliseconds.
+
 ### Deadlock? What is it?
 
 In computer science, a deadlock is a situation where two or more processes are blocked and waiting for each other to release a resource that they need to proceed, resulting in a standstill where none of the processes can make progress.
