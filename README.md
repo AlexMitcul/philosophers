@@ -4,7 +4,7 @@
 
 # Welcome to Philosophers
 Eat, Sleep, Spaghetti, repeat.
- 
+
 This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger.
 
 ## Status
@@ -13,19 +13,19 @@ Grade: 100/100%
 
 ## Project introduction
 
-This project aims to explore an important topic in computer science such as multithreading using UNIX threads and synchronazing primitive mutex.
+This project aims to explore an important topic in computer science such as multithreading using UNIX threads and synchronizing primitive mutex.
 
 This project is based on a problem formulated by Dijkstra - the Dining Philosophers Problem
 
 ### Common Instructions
 - This project must be written in C.
-- Whole project must be written in accordance with the Norm.
+- The project must be written in accordance with the Norm.
 - All functions should not quit unexpectedly - segmentation fault, bus error, double free, etc.
-- All heap allocated memory space must be properly freed when necessary. No leaks will be tolerated.
-- You must submit a Makefile which will compile your source files to the required output with the flags -Wall, -Wextra and -Werror, use cc, and your Makefile must not relink.
+- All heap-allocated memory space must be properly freed when necessary. No leaks will be tolerated.
+- You must submit a Makefile which will compile your source files to the required output with the flags -Wall, -Wextra, and -Werror, use cc, and your Makefile must not relink.
 - Your Makefile must at least contain the rules $(NAME), all, clean, fclean and re.
 
-### Project overview
+### Project Overview
 - One or more philosophers sit at a round table. There is a large bowl of spaghetti in the middle of the table.
 - The philosophers alternatively eat, think, or sleep. While they are eating, they are not thinking nor sleeping; while thinking, they are not eating nor sleeping; and, of course, while sleeping, they are not eating nor thinking.
 - There are also forks on the table. There are as many forks as philosophers.
@@ -72,7 +72,7 @@ after the actual death of the philosopher.
 
 ## Original problem definition
 
-The Dining Philosophers Problem is a classic computer science problem that illustrates the challenges of concurrency and resource allocation in distributed systems. The problem is named after a hypothetical scenario in which a group of philosophers are sitting around a circular table with one fork between each pair of adjacent philosophers, and a plate of food in the center of the table.
+The Dining Philosophers Problem is a classic computer science problem that illustrates the challenges of concurrency and resource allocation in distributed systems. The problem is named after a hypothetical scenario in which a group of philosophers is sitting around a circular table with one fork between each pair of adjacent philosophers, and a plate of food in the center of the table.
 
 Each philosopher alternates between two activities: eating and thinking. To eat, a philosopher must pick up both forks adjacent to them. Once they are finished eating, they must put down the forks so that they can be used by their neighbors.
 
@@ -92,7 +92,7 @@ At this point, all five philosophers have one fork and are waiting for their nei
 
 ### Dijkstra's solution
 
-Dijkstra's solution to the dining philosophers problem is one of the classic algorithms for preventing deadlocks in a concurrent system where multiple processes compete for a limited set of resources. The algorithm is named after Dutch computer scientist Edsger W. Dijkstra, who first proposed it in 1965.
+Dijkstra's solution to the dining philosopher's problem is one of the classic algorithms for preventing deadlocks in a concurrent system where multiple processes compete for a limited set of resources. The algorithm is named after Dutch computer scientist Edsger W. Dijkstra, who first proposed it in 1965.
 
 Dijkstra's solution is based on the idea of introducing a strict ordering of the resources, such that each philosopher can only pick up the fork of lower priority before picking up the fork of higher priority. In other words, a philosopher can only pick up the fork to their left if the fork to their right is not currently in use by a higher-priority philosopher.
 
@@ -110,7 +110,7 @@ By enforcing this ordering of resource acquisition, Dijkstra's solution ensures 
 
 ### Optimization the Dijkstra's solution
 
-To prevent the starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the forks.
+To prevent starvation, where a philosopher is repeatedly passed over for the opportunity to eat if other higher-priority philosophers are constantly using the forks.
 
 Let's make it a condition that each philosopher with an odd id comes to the table a little late. This will help to distribute the forks evenly to all the seated philosophers and prevent suboptimal behavior.
 
@@ -125,23 +125,23 @@ Let's make it a condition that each philosopher with an odd id comes to the tabl
 
 ## UNIX Threads
 
-Unix threads are a type of lightweight process that allows for concurrent execution of multiple tasks within a single process. Threads are often used to implement parallelism in programs that can benefit from simultaneous execution of multiple tasks, such as web servers, database servers, and multimedia applications.
+Unix threads are a type of lightweight process that allows for the concurrent execution of multiple tasks within a single process. Threads are often used to implement parallelism in programs that can benefit from the simultaneous execution of multiple tasks, such as web servers, database servers, and multimedia applications.
 
-In Unix-based operating systems, threads are created and managed by the operating system's kernel or by a thread library such as pthreads. Each thread has its own set of registers, stack, and program counter, but shares the same address space and other system resources with other threads in the same process. This allows threads to communicate and synchronize with each other more efficiently than processes, which require inter-process communication mechanisms such as pipes or sockets.
+In Unix-based operating systems, threads are created and managed by the operating system's kernel or by a thread library such as pthreads. Each thread has its own set of registers, stack, and program counters, but shares the same address space and other system resources with other threads in the same process. This allows threads to communicate and synchronize with each other more efficiently than processes, which require inter-process communication mechanisms such as pipes or sockets.
 
-One advantage of using threads is that they can take advantage of multiple CPUs or cores on a system, allowing for true parallelism and potentially faster execution times. However, thread-based programming can also be more challenging than single-threaded programming, as threads can introduce issues such as race conditions, deadlocks, and thread starvation. These issues can be mitigated through careful design and use of synchronization mechanisms such as mutexes, semaphores, and condition variables.
+One advantage of using threads is that they can take advantage of multiple CPUs or cores on a system, allowing for true parallelism and potentially faster execution times. However, thread-based programming can also be more challenging than single-threaded programming, as threads can introduce issues such as race conditions, deadlocks, and thread starvation. These issues can be mitigated through careful design and the use of synchronization mechanisms such as mutexes, semaphores, and condition variables.
 
-### How use threads
+### How to use threads
 
 pthread_create is a function used to create a new thread in a multithreaded program. Here is how it works:
 
 - The function takes as input several parameters, including a pointer to a pthread_t variable, which will be used to store the ID of the new thread, a pointer to a pthread_attr_t variable, which is used to specify various attributes of the new thread, a pointer to a function that will be executed by the new thread, and an optional argument to pass to the function.
 
-- The function creates a new thread with the specified attributes, and assigns a unique ID to the thread, which is stored in the pthread_t variable that was passed as input.
+- The function creates a new thread with the specified attributes and assigns a unique ID to the thread, which is stored in the pthread_t variable that was passed as input.
 
 - The new thread starts executing the function that was specified as input, passing in the optional argument.
 
-- After the new thread is created, both the parent thread and the new thread can execute concurrently, each performing their own set of instructions.
+- After the new thread is created, both the parent thread and the new thread can execute concurrently, each performing its own set of instructions.
 
 
 pthread_detach is a function used to detach a thread that was previously created with the pthread_create function. Here is how it works:
@@ -164,9 +164,9 @@ pthread_join is a function used to wait for a thread to terminate and to obtain 
 
 - Any resources that were associated with the thread are released and made available for reuse by the system.
 
-To more information use [man page](https://man7.org/linux/man-pages/man7/pthreads.7.html)
+For more information use [man page](https://man7.org/linux/man-pages/man7/pthreads.7.html)
 
-### Which of them I need to use?
+### Which of them do I need to use?
 
 The main difference between pthread_join and pthread_detach is that pthread_join is used to wait for a thread to terminate and obtain its exit status, while pthread_detach is used to detach a thread from the process so that it can continue executing independently.
 
@@ -189,11 +189,11 @@ In most programming languages and operating systems, a mutex is implemented as a
 
 Once a thread has finished accessing the resource, it releases the mutex lock by calling a mutex function, which frees the lock and allows other threads to acquire it. By using mutexes, programmers can write multithreaded programs that are thread-safe, efficient, and free from synchronization issues.
 
-### Ok, I really need to user mutex?
+### Ok, do I really need to use mutex?
 
 Short answer:
 
-Yes, for every variable that one of your threads will write some data in that variable and other thread will be read/write data from there, you need to protect access to this variable using mutex.
+Yes, for every variable that one of your threads will write some data in that variable, and the other thread will read/write data from there, you need to protect access to this variable using a mutex.
 
 Long answer:
 
@@ -207,7 +207,7 @@ Here are some specific reasons why you might need to use a mutex:
 
 - To manage access to resources: In some multithreaded programs, multiple threads might need to access a shared resource, such as a file, network socket, or device. A mutex can be used to manage access to the resource, ensuring that only one thread at a time can access it and preventing conflicts and synchronization issues.
 
-### How use mutex
+### How to use mutex
 
 The pthread_mutex_init function is used to initialize a mutex object in a multithreaded program. It creates a new mutex object and sets its attributes to the specified values.
 
@@ -221,7 +221,7 @@ Here is how pthread_mutex_init works:
 
 - The function returns an error code if the initialization fails, such as if there is insufficient memory to create the mutex object, or if the mutex attribute object contains invalid values.
 
-In our project we don't have access to functions which initialize attributes for mutex and we need to pass NULL in this case.
+In our project, we don't have access to functions that initialize attributes for mutex and we need to pass NULL in this case.
 
 pthread_mutex_lock and pthread_mutex_unlock are functions that are used to control access to a shared resource in a multithreaded program by acquiring and releasing a mutex lock.
 
@@ -241,7 +241,7 @@ pthread_mutex_destroy is a function used to destroy a mutex object that was prev
 
 - After the mutex object is destroyed, it can no longer be used, and any attempt to use it will result in undefined behavior.
 
-To more information use [man page](https://linux.die.net/man/3/pthread_mutex_init)
+For more information use [man page](https://linux.die.net/man/3/pthread_mutex_init)
 
 ```cpp
 #include <pthread.h>
